@@ -29,9 +29,10 @@ class AccountInputPage extends StatefulWidget {
 
 class _AccountInputPageState extends State<AccountInputPage> {
   final TextEditingController _accountController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
 
   void _goToBalancePage() {
-    if (_accountController.text.isNotEmpty) {
+    if (_accountController.text.isNotEmpty && _passwordController.text.isNotEmpty) {
       Navigator.push(
         context,
         MaterialPageRoute(
@@ -41,7 +42,7 @@ class _AccountInputPageState extends State<AccountInputPage> {
       );
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Please enter your account number.')),
+        const SnackBar(content: Text('Please enter your account number and password.')),
       );
     }
   }
@@ -82,12 +83,22 @@ class _AccountInputPageState extends State<AccountInputPage> {
               ),
             ),
             const SizedBox(height: 20),
+            TextField(
+              controller: _passwordController,
+              obscureText: true,
+              decoration: const InputDecoration(
+                labelText: 'Password',
+                border: OutlineInputBorder(),
+                prefixIcon: Icon(Icons.lock),
+              ),
+            ),
+            const SizedBox(height: 20),
             ElevatedButton(
               style: ElevatedButton.styleFrom(
                 backgroundColor: const Color.fromARGB(255, 110, 168, 235),
               ),
               onPressed: _goToBalancePage,
-              child: const Text('Lihat Saldo'),
+              child: const Text('Masuk'),
             ),
           ],
         ),
@@ -101,9 +112,17 @@ class BalanceInfoPage extends StatelessWidget {
 
   const BalanceInfoPage({super.key, required this.accountNumber});
 
+  void _goToBalanceDetailPage(BuildContext context) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => BalanceDetailPage(accountNumber: accountNumber),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
-    // Placeholder for the balance, you can replace this with dynamic data.
     double balance = 5000000.0;
 
     return Scaffold(
@@ -135,8 +154,100 @@ class BalanceInfoPage extends StatelessWidget {
                 color: Colors.green,
               ),
             ),
+            const SizedBox(height: 20),
+            ElevatedButton(
+              onPressed: () => _goToBalanceDetailPage(context),
+              child: const Text('Lihat Detail Saldo'),
+            ),
           ],
         ),
+      ),
+      bottomNavigationBar: BottomNavigationBar(
+        items: const [
+          BottomNavigationBarItem(
+            icon: Icon(Icons.home),
+            label: 'Beranda',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.account_balance_wallet),
+            label: 'Saldo',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.settings),
+            label: 'Pengaturan',
+          ),
+        ],
+        currentIndex: 1, // Menunjukkan bahwa ini halaman saldo
+        onTap: (index) {
+          // Tambahkan logika navigasi jika diperlukan.
+        },
+      ),
+    );
+  }
+}
+
+class BalanceDetailPage extends StatelessWidget {
+  final String accountNumber;
+
+  const BalanceDetailPage({super.key, required this.accountNumber});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Colors.blue[800],
+        title: const Text("Detail Informasi Saldo"),
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          children: [
+            DataTable(
+              columns: const [
+                DataColumn(label: Text('Informasi')),
+                DataColumn(label: Text('Detail')),
+              ],
+              rows: [
+                DataRow(cells: [
+                  const DataCell(Text('Saldo Utama')),
+                  DataCell(Text('Rp 5,000,000')),
+                ]),
+                DataRow(cells: [
+                  const DataCell(Text('Penarikan Terakhir')),
+                  DataCell(Text('Rp 1,000,000')),
+                ]),
+                DataRow(cells: [
+                  const DataCell(Text('Transaksi Terbaru')),
+                  DataCell(Text('Rp 500,000')),
+                ]),
+                DataRow(cells: [
+                  const DataCell(Text('Bunga Bulanan')),
+                  DataCell(Text('Rp 50,000')),
+                ]),
+              ],
+            ),
+          ],
+        ),
+      ),
+      bottomNavigationBar: BottomNavigationBar(
+        items: const [
+          BottomNavigationBarItem(
+            icon: Icon(Icons.home),
+            label: 'Beranda',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.account_balance_wallet),
+            label: 'Saldo',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.settings),
+            label: 'Pengaturan',
+          ),
+        ],
+        currentIndex: 1, // Menunjukkan bahwa ini halaman saldo
+        onTap: (index) {
+          // Tambahkan logika navigasi jika diperlukan.
+        },
       ),
     );
   }
