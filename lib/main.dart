@@ -16,6 +16,9 @@ class MyApp extends StatelessWidget {
         useMaterial3: true,
       ),
       home: const AccountInputPage(),
+      routes: {
+        '/transfer': (context) => TransferPage(),
+      },
     );
   }
 }
@@ -198,7 +201,7 @@ class BalanceInfoPage extends StatelessWidget {
               children: [
                 ElevatedButton(
                   onPressed: () {
-                    // Implementasikan logika transfer
+                    Navigator.pushNamed(context, '/transfer');
                   },
                   child: const Text('Transfer'),
                 ),
@@ -209,6 +212,133 @@ class BalanceInfoPage extends StatelessWidget {
                   child: const Text('Top Up'),
                 ),
               ],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class TransferPage extends StatefulWidget {
+  @override
+  _TransferPageState createState() => _TransferPageState();
+}
+
+class _TransferPageState extends State<TransferPage> {
+  final _recipientController = TextEditingController();
+  final _amountController = TextEditingController();
+  String _selectedBank = 'BCA';
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: Colors.grey[100],
+      appBar: AppBar(
+        backgroundColor: Colors.blue[800],
+        title: Text('Transfer'),
+        elevation: 0,
+      ),
+      body: Padding(
+        padding: EdgeInsets.all(20),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              'Bank Tujuan',
+              style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            SizedBox(height: 10),
+            DropdownButtonFormField<String>(
+              value: _selectedBank,
+              items: ['BCA', 'Mandiri', 'BNI', 'BRI']
+                  .map((bank) => DropdownMenuItem<String>(
+                        value: bank,
+                        child: Text(bank),
+                      ))
+                  .toList(),
+              onChanged: (value) {
+                setState(() {
+                  _selectedBank = value!;
+                });
+              },
+              decoration: InputDecoration(
+                hintText: 'Pilih bank tujuan',
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                filled: true,
+                fillColor: Colors.white,
+                contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+              ),
+            ),
+            SizedBox(height: 20),
+            Text(
+              'Nomor Rekening Tujuan',
+              style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            SizedBox(height: 10),
+            TextField(
+              controller: _recipientController,
+              keyboardType: TextInputType.number,
+              decoration: InputDecoration(
+                hintText: 'Masukkan nomor rekening',
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                filled: true,
+                fillColor: Colors.white,
+                contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+              ),
+            ),
+            SizedBox(height: 20),
+            Text(
+              'Jumlah Transfer',
+              style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            SizedBox(height: 10),
+            TextField(
+              controller: _amountController,
+              keyboardType: TextInputType.number,
+              decoration: InputDecoration(
+                hintText: 'Masukkan jumlah',
+                prefixText: 'Rp ',
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                filled: true,
+                fillColor: Colors.white,
+                contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+              ),
+            ),
+            SizedBox(height: 30),
+            ElevatedButton(
+              onPressed: () {
+                // Implement transfer logic
+              },
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.blue[800],
+                padding: EdgeInsets.symmetric(vertical: 16),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10),
+                ),
+              ),
+              child: Text(
+                'Transfer Sekarang',
+                style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
             ),
           ],
         ),
