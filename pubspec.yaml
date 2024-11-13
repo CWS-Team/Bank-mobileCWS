@@ -19,6 +19,6 @@ dev_dependencies:
 
 flutter:
   uses-material-design: true
-
   assets:
-    - asset/logo-klikbca.jpg
+    - asset/logobca.png
+
