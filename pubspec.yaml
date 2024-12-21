@@ -22,3 +22,5 @@ flutter:
   assets:
     - asset/logobca.png
 
+dependencies:
+  http: ^0.15.0
