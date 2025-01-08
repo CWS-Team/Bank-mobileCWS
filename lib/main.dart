@@ -25,17 +25,23 @@ Future<Map<String, dynamic>> loginAndGetSaldo(String rekening, String password) 
         final saldoData = json.decode(saldoResponse.body);
         return {
           'status': 'success',
-          'saldo': saldoData['saldo'], // Saldo dari API
+          'saldo': double.parse(saldoData['saldo'].toString()),
         };
       } else {
         return {'status': 'error', 'message': 'Gagal mengambil saldo'};
       }
     } else {
-      return {'status': 'error', 'message': 'Login gagal'};
+      final errorData = json.decode(response.body);
+      return {'status': 'error', 'message': errorData['message'] ?? 'Login gagal'};
     }
   } catch (e) {
     return {'status': 'error', 'message': 'Terjadi kesalahan: $e'};
   }
+}
+
+class AccountInputPage extends StatefulWidget {
+  @override
+  _AccountInputPageState createState() => _AccountInputPageState();
 }
 
 class _AccountInputPageState extends State<AccountInputPage> {
@@ -44,11 +50,9 @@ class _AccountInputPageState extends State<AccountInputPage> {
 
   void _goToHomePage() async {
     if (_accountController.text.isNotEmpty && _passwordController.text.isNotEmpty) {
-      // Panggil fungsi login dan ambil saldo
       final result = await loginAndGetSaldo(_accountController.text, _passwordController.text);
 
       if (result['status'] == 'success') {
-        // Jika login berhasil, pindah ke halaman Home dengan saldo
         Navigator.push(
           context,
           MaterialPageRoute(
@@ -59,12 +63,12 @@ class _AccountInputPageState extends State<AccountInputPage> {
           ),
         );
       } else {
-        // Jika gagal login atau mengambil saldo, tampilkan pesan
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(result['message'])));
       }
     } else {
-      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-          content: Text('Silakan masukkan nomor rekening dan sandi.')));
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Silakan masukkan nomor rekening dan sandi.')),
+      );
     }
   }
 
@@ -146,7 +150,7 @@ class BalanceInfoPage extends StatelessWidget {
             Row(
               children: [
                 Image.asset(
-                  'asset/logobca.png',
+                  'assets/logobca.png',
                   height: 40,
                 ),
                 const SizedBox(width: 10),
@@ -181,4 +185,10 @@ class BalanceInfoPage extends StatelessWidget {
       ),
     );
   }
+}
+
+void main() {
+  runApp(MaterialApp(
+    home: AccountInputPage(),
+  ));
 }
