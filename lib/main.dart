@@ -76,15 +76,15 @@ class _NavigationScreenState extends State<NavigationScreen> {
         items: const [
           BottomNavigationBarItem(
             icon: Icon(Icons.account_balance),
-            label: 'Account Info',
+            label: 'Info Akun',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.send),
-            label: 'Transfer Funds',
+            label: 'Transfer',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.receipt),
-            label: 'Transactions',
+            label: 'Riwayat',
           ),
         ],
       ),
@@ -150,7 +150,7 @@ class _AccountInfoScreenState extends State<AccountInfoScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Account Info'),
+        title: const Text('Info Akun'),
       ),
       body: _isLoading
           ? const Center(child: CircularProgressIndicator())
@@ -596,7 +596,7 @@ class _TransferFundsScreenState extends State<TransferFundsScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Transfer Funds'),
+        title: const Text('Transfer'),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
